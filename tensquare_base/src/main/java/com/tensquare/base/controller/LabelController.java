@@ -7,6 +7,8 @@ import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/label")
@@ -41,5 +43,10 @@ public class LabelController {
     public Result deleteById(@PathVariable("labelId") String labelId) {
         labelService.deleteById(labelId);
         return new Result(true, StatusCode.OK, "删除成功");
+    }
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public  Result findSearch(@RequestBody Label label){
+        List<Label> list= labelService.findSearch(label);
+        return new Result(true,StatusCode.OK,"查询成功",list);
     }
 }
