@@ -34,6 +34,16 @@ public class ProblemController {
 		Page<Problem> pageData=problemService.newlist(labelid,page,rows);
 		return new Result(true,StatusCode.OK,"查询成功",new PageResult<Problem>(pageData.getTotalElements(),pageData.getContent()));
 	}
+	@RequestMapping(value = "/hotlist/{labelid}/{page}/{rows}",method = RequestMethod.GET)
+	public Result hotlist(@PathVariable String labelid,@PathVariable int page,@PathVariable int rows){
+		Page<Problem> pageData=problemService.hotlist(labelid,page,rows);
+		return new Result(true,StatusCode.OK,"查询成功",new PageResult<Problem>(pageData.getTotalElements(),pageData.getContent()));
+	}
+	@RequestMapping(value = "/waitlist/{labelid}/{page}/{rows}",method = RequestMethod.GET)
+	public Result waitlist(@PathVariable String labelid,@PathVariable int page,@PathVariable int rows){
+		Page<Problem> pageData=problemService.waitlist(labelid,page,rows);
+		return new Result(true,StatusCode.OK,"查询成功",new PageResult<Problem>(pageData.getTotalElements(),pageData.getContent()));
+	}
 	/**
 	 * 查询全部数据
 	 * @return

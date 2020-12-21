@@ -45,6 +45,14 @@ public class ProblemService {
 		Pageable pageable=PageRequest.of(page-1,rows);
 		return problemDao.newlist(labelid,pageable);
 	}
+	public Page<Problem> hotlist(String labelid,int page,int rows){
+		Pageable pageable=PageRequest.of(page-1,rows);
+		return problemDao.hotlist(labelid,pageable);
+	}
+	public Page<Problem>  waitlist(String labelid,int page,int rows){
+		Pageable pageable=PageRequest.of(page-1,rows);
+		return problemDao.waitlist(labelid,pageable);
+	}
 	/**
 	 * 查询全部列表
 	 * @return

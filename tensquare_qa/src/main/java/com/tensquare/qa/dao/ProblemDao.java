@@ -18,4 +18,8 @@ import java.util.List;
 public interface ProblemDao extends JpaRepository<Problem,String>,JpaSpecificationExecutor<Problem>{
     @Query(value = "select * from tb_problem,tb_pl where id=problemid AND labelid=? ORDER BY replytime Desc",nativeQuery = true)
     public Page<Problem> newlist(String labelid, Pageable pageable);
+    @Query(value = "select * from tb_problem,tb_pl where id=problemid AND labelid=? ORDER BY reply Desc",nativeQuery = true)
+    public Page<Problem> hotlist(String labelid, Pageable pageable);
+    @Query(value = "select * from tb_problem,tb_pl where id=problemid AND labelid=? and reply=0 order by createtime desc",nativeQuery = true)
+    public Page<Problem> waitlist(String labelid, Pageable pageable);
 }
