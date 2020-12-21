@@ -3,6 +3,8 @@ package com.tensquare.base.service;
 import com.tensquare.base.dao.LabelDao;
 import com.tensquare.base.pojo.Label;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -73,5 +75,27 @@ public class LabelService {
             }
 
         });
+    }
+
+    public Page<Label> findSearchPage(Integer page, Integer size, Label label) {
+        Pageable pageable = PageRequest.of(page-1,size);
+        return  labelDao.findAll(new Specification<Label>() {
+            @Override
+            public Predicate toPredicate(Root<Label> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                //定义一个集合来存放所有条件
+                List<Predicate> list = new ArrayList<>();
+                if (label.getLabelname() == null && "".equals(label.getLabelname())) {
+                    Predicate predicate = criteriaBuilder.like(root.get("labelname").as(String.class), "%" + label.getLabelname() + "%");//where labelname like "%小明%"
+                    list.add(predicate);
+                }
+                if (label.getState() == null && "".equals(label.getState())) {
+                    Predicate predicate = criteriaBuilder.equal(root.get("state").as(String.class), label.getState());//where state = 1
+                    list.add(predicate);
+                }
+                Predicate[] parr = new Predicate[list.size()];
+                list.toArray(parr);
+                return criteriaBuilder.and(parr);
+            }
+        }, pageable);
     }
 }
