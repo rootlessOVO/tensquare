@@ -11,12 +11,14 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import util.IdWorker;
@@ -31,6 +33,7 @@ import com.tensquare.article.pojo.Article;
  *
  */
 @Service
+@Transactional
 public class ArticleService {
 
 	@Autowired
@@ -38,7 +41,11 @@ public class ArticleService {
 	
 	@Autowired
 	private IdWorker idWorker;
-
+    @Autowired
+	private RedisTemplate redisTemplate;
+	 public void examine(String articleId){
+	 	articleDao.examine(articleId);
+	 }
 	/**
 	 * 查询全部列表
 	 * @return
@@ -78,7 +85,12 @@ public class ArticleService {
 	 * @return
 	 */
 	public Article findById(String id) {
-		return articleDao.findById(id).get();
+		Article article=(Article)redisTemplate.opsForValue().get("article_"+id);
+		if(article==null){
+			article=articleDao.findById(id).get();
+			redisTemplate.opsForValue().set("article_"+id,article);
+		}
+		return article;
 	}
 
 	/**

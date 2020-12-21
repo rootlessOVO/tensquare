@@ -29,10 +29,12 @@ public class ArticleController {
 
 	@Autowired
 	private ArticleService articleService;
-	@RequestMapping(value = "{articleId}",method = RequestMethod.PUT)
-	public Result examine(){
 
-		return new Result(true,StatusCode.OK,"查询成功");
+
+	@RequestMapping(value = "/examine/{articleId}",method = RequestMethod.PUT)
+	public Result examine(@PathVariable String articleId){
+        articleService.examine(articleId);
+		return new Result(true,StatusCode.OK,"修改成功");
 	}
 	/**
 	 * 查询全部数据
