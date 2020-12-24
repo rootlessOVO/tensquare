@@ -1,6 +1,6 @@
 server: 
   port: 9002
-spring: 
+spring:
   application:  
     name: tensquare-recruit #指定服务名
   datasource:  
@@ -11,3 +11,4 @@ spring:
   jpa: 
     database: mysql
     show-sql: true
+
